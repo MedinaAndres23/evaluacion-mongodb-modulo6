@@ -1,33 +1,57 @@
-// script formulario
-document.getElementById('formulario').addEventListener('submit', async function(e) {
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('registroForm');
+  const mensaje = document.getElementById('mensaje');
+  const listaUsuarios = document.getElementById('listaUsuarios');
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    // obtener datos del formulario
+
     const nombre = document.getElementById('nombre').value;
     const edad = document.getElementById('edad').value;
     const ciudad = document.getElementById('ciudad').value;
-    
-    // enviar datos al  servidor
+
     try {
-        const respuesta = await fetch('/usuarios', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                nombre: nombre,
-                edad: edad,
-                ciudad: ciudad
-            })
-        });
-        
-        const resultado = await respuesta.text();
-        document.getElementById('mensaje').innerHTML = resultado;
-        
-        // limpiar formulario
-        document.getElementById('formulario').reset();
-        
-    } catch (error) {
-        document.getElementById('mensaje').innerHTML = 'Error: ' + error;
+      const res = await fetch('/api/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, edad, ciudad })
+      });
+
+      const data = await res.json();
+      mensaje.textContent = data.mensaje || 'Error';
+      mensaje.style.color = 'green';
+
+      form.reset();
+      cargarUsuarios();
+    } catch (err) {
+      mensaje.textContent = 'Error al conectar con el servidor';
+      mensaje.style.color = 'red';
     }
+  });
+
+  async function cargarUsuarios() {
+    listaUsuarios.innerHTML = '';
+
+    try {
+      const res = await fetch('/api/usuarios');
+      const usuarios = await res.json();
+
+      if (usuarios.length === 0) {
+        listaUsuarios.textContent = 'No hay usuarios registrados.';
+        return;
+      }
+
+      const ul = document.createElement('ul');
+      usuarios.forEach(u => {
+        const li = document.createElement('li');
+        li.textContent = `${u.nombre} (${u.edad} años) - ${u.ciudad}`;
+        ul.appendChild(li);
+      });
+      listaUsuarios.appendChild(ul);
+    } catch (err) {
+      listaUsuarios.textContent = 'Error al cargar los usuarios.';
+    }
+  }
+
+  cargarUsuarios();
 });

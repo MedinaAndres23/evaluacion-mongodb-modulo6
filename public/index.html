@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Registro de Usuarios</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Usuarios</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1>Registrar Usuario</h1>
-    <form id="formulario">
-        <label>Nombre:</label>
-        <input type="text" id="nombre" required><br><br>
-        
-        <label>Edad:</label>
-        <input type="number" id="edad" required><br><br>
-        
-        <label>Ciudad:</label>
-        <input type="text" id="ciudad" required><br><br>
-        
-        <button type="submit">Registrar</button>
-    </form>
-    
-    <div id="mensaje"></div>
-    <div id="usuarios"></div>
-    
-    <script src="main.js"></script>
+  <h1>Registro de Usuario</h1>
+
+  <form id="registroForm">
+    <input type="text" id="nombre" placeholder="Nombre" required />
+    <input type="number" id="edad" placeholder="Edad" required />
+    <input type="text" id="ciudad" placeholder="Ciudad" required />
+    <button type="submit">Registrar</button>
+  </form>
+
+  <p id="mensaje"></p>
+
+  <h3>Usuarios Registrados:</h3>
+  <div id="listaUsuarios"></div>
+
+  <script src="main.js"></script>
 </body>
-</html> 
+</html>

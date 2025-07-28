@@ -1,20 +1,20 @@
-// servidor express básico
 const express = require('express');
+const dotenv = require('dotenv');
 const path = require('path');
-const app = express();
+const connectDB = require('./config/database');
 
-// Cargo mis rutas de usuarios
+dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+connectDB();
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/usuarios', require('./routes/usuarios'));
 
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('Mi API de usuarios funciona!');
-});
+const usuarioRoutes = require('./routes/usuarios');
+app.use('/api/usuarios', usuarioRoutes);
 
-// Arranco en el puerto 3000
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log('Servidor corriendo en http://localhost:' + PORT);
+  console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
 });
